@@ -1,0 +1,8 @@
+{
+  "name": "othello-mobile",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "da992e1f"
+}
