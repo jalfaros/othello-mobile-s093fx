@@ -1,7 +1,10 @@
 {
   "name": "othello-mobile",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {
+      "enabled": false
+    },
+    "cordova": {}
   },
   "type": "angular",
   "id": "da992e1f"
