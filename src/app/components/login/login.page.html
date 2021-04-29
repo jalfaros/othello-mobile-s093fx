@@ -1,4 +1,4 @@
-<ion-header style="text-align: center">
+<ion-header style="text-align: center;">
   <ion-toolbar>
     <ion-title>Welcome to Othello</ion-title>
   </ion-toolbar>
@@ -6,9 +6,9 @@
 
 
 <ion-content>
-  <ion-card class="primary">
+  <ion-card class="primary" style="margin-top: 25%;">
     <ion-card-header style="text-align: center;">
-      <h3>Othello Login</h3>
+      <strong style = "color: black"><h3>Othello Login</h3></strong>
       <br>
     </ion-card-header>
 
@@ -27,6 +27,8 @@
                       required
           > 
         </ion-input>
+
+
       </ion-item>
       <small *ngIf="invalidEmail">Provide a correct email</small>
         
@@ -44,19 +46,29 @@
         </ion-item>
         <small *ngIf="invalidEmail">You must enter the password</small>
    
-        <ion-button shape = "round" style = "margin-top: 10%" type="submit" expand = "block" color = "success">
+        
+        <ion-button [disabled]="!loginForm.valid" 
+                    shape = "round" 
+                    style = "margin-top: 10%" 
+                    type="submit" 
+                    expand = "block" 
+                    color = "success">
+
           <span style="color: white" >Login</span>
         </ion-button>
 
-        <ion-button (click)="googleAuth()" shape = "round" style = "margin-top: 5%" type="button" expand = "block" color = "medium">
+        <ion-button (click)="googleAuth()" 
+                    shape = "round" 
+                    style = "margin-top: 5%" 
+                    type="button" 
+                    expand = "block" 
+                    color = "medium">
+
           <ion-icon style = "color: white" name="logo-google"></ion-icon>
         </ion-button>
-
-
       </form>
-
-
     </ion-card-content>
-
   </ion-card> 
+
+
 </ion-content>

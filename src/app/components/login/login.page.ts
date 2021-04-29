@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthServiceService } from 'src/app/services/auth-service.service';
 import { ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -17,7 +18,8 @@ export class LoginPage implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
     private fireAuth: AuthServiceService,
-    private toast: ToastController) { }
+    private toast: ToastController,
+    private router: Router) { }
 
   ngOnInit() {
     this.generateForm();
@@ -58,9 +60,10 @@ export class LoginPage implements OnInit {
       email: response.email
     }));
 
-    this.informationToast(`Bienvenido: ${response.displayName}`, 'success');
+    this.informationToast(`Bienvenido: ${response.displayName}`, 'dark');
+    this.router.navigate(['/lobby']);
 
-  }
+  } 
 
 
   onSubmit() {
@@ -82,6 +85,7 @@ export class LoginPage implements OnInit {
       return;
     }
     this.firebaseLogin(this.loginForm.value);
+    this.loginForm.reset();
   }
 
   firebaseLogin(loginForm) {
