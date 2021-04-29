@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { GameCreaterService } from 'src/app/services/game-creater.service';
 import { ToastController } from '@ionic/angular';
+import { GameCreaterService} from '../../services/game-creater.service'
 
 @Component({
   selector: 'app-lobby',
