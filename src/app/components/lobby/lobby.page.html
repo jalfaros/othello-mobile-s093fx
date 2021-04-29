@@ -32,7 +32,6 @@
 
   <ion-card-content *ngIf="segmentModel === 'settings'">
 
-
     <ion-item [disabled] = "playerGames.length === 0">
       <ion-label>Games</ion-label>
       <ion-select (ionChange)="onSegmentChange($event)" 
@@ -50,6 +49,54 @@
     >New game
     </ion-button>
 
+  </ion-card-content>
+
+  <ion-card-content *ngIf="segmentModel === 'players'">
+
+    <ion-item *ngIf="selectedUser">
+      <ion-avatar style="margin-right: 5%;">
+        <img src="../../../assets/icon/avatar.png">
+      </ion-avatar>
+      <ion-label>
+        <h1>Second player</h1>
+        <div style="margin-top: 5%;">
+          <h2>{{ selectedUser.displayName }}</h2>
+          <h3>{{ selectedUser.email }}</h3>
+          <p>{{ selectedUser.uid }}</p>
+        </div>
+      </ion-label>
+      <ion-button style="margin-top: 5%" color="danger" (click)="deleteSelectedUser()">
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
+
+    </ion-item> 
+
+    <ion-button   *ngIf="selectedUser"
+                  style="margin-top: 10%;"
+                  expand="block"
+                  color="success"
+      >
+      Play
+      </ion-button>
+    
+
+      <ion-button *ngIf="!selectedUser"
+                  style="margin-top: 10%;"
+                  expand="block"
+                  color="secondary"
+      >
+      Individual game
+      </ion-button>
+      
+      <ion-button (click)="onMultiplayerClick()"
+                  style="margin-top: 10%;"
+                  expand="block"
+                  color="medium"
+      >
+      Multiplayer game
+      </ion-button>
+
+    
   </ion-card-content>
 
 

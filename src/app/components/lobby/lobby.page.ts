@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { NavParams, ToastController } from '@ionic/angular';
 import { GameCreaterService} from '../../services/game-creater.service'
+import { ModalController } from '@ionic/angular'
+import { PlayersPage } from './modalUser/players/players.page';
 
 @Component({
   selector: 'app-lobby',
@@ -10,15 +12,31 @@ import { GameCreaterService} from '../../services/game-creater.service'
 export class LobbyPage implements OnInit {
 
   constructor(private _gameService: GameCreaterService,
-              private toast: ToastController) { }
+              private toast: ToastController,
+              public modalController: ModalController,
+              ) { }
 
   segmentModel = "settings";
   playerGames = [];
   selectedGame;
+  selectedUser;
 
+  
   ngOnInit() {
     this.getAllGames();
   }
+
+  async presentModal(){
+  const modal = await this.modalController.create({
+    component: PlayersPage
+  })
+  modal.onDidDismiss().then( user => {
+    var user_selected = user['data']['user']
+    this.selectedUser = user_selected;
+  })
+  return await modal.present();
+
+}
 
   async informationToast(message, toastType) {
     const toast = await this.toast.create({
@@ -49,9 +67,22 @@ export class LobbyPage implements OnInit {
     });
   }
 
-  onSegmentChange($event) {
-    this.segmentModel = 'players'
+  onSegmentChange() {
+    this.segmentModel = 'players';
+
   }
+
+  onMultiplayerClick(){
+    this.presentModal();
+    
+  }
+
+  deleteSelectedUser(){
+    this.selectedUser = undefined;
+  }
+
+  
+  
 
 
 

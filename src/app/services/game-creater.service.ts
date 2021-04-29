@@ -25,5 +25,10 @@ export class GameCreaterService {
       .pipe(map(res => res ));
   }
 
+  getAllPlayers(){
+    return this.http.get(`${this.BASE_URL}/getAllPlayers`)
+      .pipe(map(res => res['users'] ));
+  }
+
 
 }
