@@ -61,9 +61,10 @@ export class LoginPage implements OnInit {
       email: response.email
     }));
 
-    this.informationToast(`Bienvenido: ${response.displayName}`, 'success');
+    this.informationToast(`Bienvenido: ${response.displayName}`, 'dark');
+    this.router.navigate(['/lobby']);
 
-  }
+  } 
 
 
   onSubmit() {
@@ -85,6 +86,7 @@ export class LoginPage implements OnInit {
       return;
     }
     this.firebaseLogin(this.loginForm.value);
+    this.loginForm.reset();
   }
 
   firebaseLogin(loginForm) {

@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title style="text-align: center">Lobby</ion-title>
+    
+    <ion-buttons slot = "start">
+      <ion-back-button defaultHref="login"></ion-back-button>
+    </ion-buttons>
+    
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      
+    <ion-segment [(ngModel)]="segmentModel">
+      
+      <ion-segment-button value="settings">
+        <ion-label>Game Settings</ion-label>
+      </ion-segment-button>
+      
+      <ion-segment-button value="players" disabled = "true" >
+        <ion-label>Players</ion-label>
+      </ion-segment-button>
+    
+  
+  
+    </ion-segment>
+  </ion-card-header>
+
+
+  <ion-card-content *ngIf="segmentModel === 'settings'">
+
+
+    <ion-item [disabled] = "playerGames.length === 0">
+      <ion-label>Games</ion-label>
+      <ion-select (ionChange)="onSegmentChange($event)" 
+                  interface = "popover" 
+                  [(ngModel)]="selectedGame" 
+                  placeholder="Select one">
+        <ion-select-option *ngFor="let game of playerGames; let i = index" [value] = "playerGames[i]">{{ game }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-button (click)="onCreateGame()"
+                expand="block" 
+                color = "success"
+                style="margin-top: 10%;"
+    >New game
+    </ion-button>
+
+  </ion-card-content>
+
+
+
+
+  </ion-card>
+</ion-content>

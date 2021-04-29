@@ -9,6 +9,10 @@ const routes: Routes = [
     redirectTo: 'board'
   },
   {
+    path: 'lobby',
+    loadChildren: () => import('./components/lobby/lobby.module').then( m => m.LobbyPageModule)
+  },
+  {
     path: 'login',
     loadChildren: () => import('./components/login/login.module').then(m => m.LoginPageModule)
   },
