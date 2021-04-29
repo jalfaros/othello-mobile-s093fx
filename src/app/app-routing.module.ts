@@ -6,7 +6,7 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'login'
+    redirectTo: 'board'
   },
   {
     path: 'login',
@@ -15,7 +15,12 @@ const routes: Routes = [
   {
     path: 'register',
     loadChildren: () => import('./components/register/register.module').then(m => m.RegisterPageModule)
+  },
+  {
+    path: 'board',
+    loadChildren: () => import('./components/board/board.module').then(m => m.BoardPageModule)
   }
+
 
 
 ];
