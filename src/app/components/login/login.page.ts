@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthServiceService } from 'src/app/services/auth-service.service';
-
+import { ToastController } from '@ionic/angular';
 
 
 @Component({
@@ -16,7 +16,8 @@ export class LoginPage implements OnInit {
   loginForm: FormGroup
 
   constructor(private formBuilder: FormBuilder,
-              private fireAuth: AuthServiceService) { }
+    private fireAuth: AuthServiceService,
+    private toast: ToastController) { }
 
   ngOnInit() {
     this.generateForm();
@@ -30,6 +31,16 @@ export class LoginPage implements OnInit {
     return this.loginForm.get('password').invalid && this.loginForm.get('password').touched
   }
 
+  async informationToast(message, toastType) {
+    const toast = await this.toast.create({
+      message: message,
+      color: toastType,
+      animated: true,
+      duration: 2000
+    });
+    toast.present();
+  }
+
   generateForm() {
 
 
@@ -39,28 +50,59 @@ export class LoginPage implements OnInit {
     })
   }
 
+  saveUserInformation(response) {
+
+    localStorage.setItem('user', JSON.stringify({
+      uid: response.uid,
+      displayName: response.displayName,
+      email: response.email
+    }));
+
+    this.informationToast(`Bienvenido: ${response.displayName}`, 'success');
+
+  }
+
 
   onSubmit() {
 
-    if ( this.loginForm.invalid ){
-      Object.values( this.loginForm.controls )
-      .forEach( iterator => {
+    if (this.loginForm.invalid) {
+      Object.values(this.loginForm.controls)
+        .forEach(iterator => {
 
-        if ( iterator instanceof FormGroup ){
+          if (iterator instanceof FormGroup) {
 
-          Object.values( iterator.controls ).forEach( campo =>{
-            campo.markAllAsTouched();
-          })
+            Object.values(iterator.controls).forEach(campo => {
+              campo.markAllAsTouched();
+            })
 
-        } else{
-          iterator.markAllAsTouched();
-        }
-
-      });
-     
+          } else {
+            iterator.markAllAsTouched();
+          }
+        });
       return;
     }
-    this.fireAuth.localSignIn( this.loginForm.value );
+    this.firebaseLogin(this.loginForm.value);
+  }
+
+  firebaseLogin(loginForm) {
+
+    this.fireAuth.localSignIn(loginForm).then(response => {
+      if (response['message']) {
+        this.informationToast(response['message'], 'danger');
+      } else {
+        this.saveUserInformation(response);
+      }
+    })
+  }
+
+  googleAuth() {
+    this.fireAuth.googleSignIn().then(response => {
+      if (response['message']) {
+        this.informationToast(response['message'], 'danger');
+      } else {
+        this.saveUserInformation(response);
+      }
+    });
   }
 
 }

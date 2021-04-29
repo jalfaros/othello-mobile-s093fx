@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Router } from "@angular/router";
 import { AngularFireAuth } from "@angular/fire/auth";
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import * as firebase from 'firebase';
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +13,26 @@ export class AuthServiceService {
 
 
 
-  localSignIn( {email, password} ){
+  localSignIn( {email, password} ) {
 
-    return this.fireAuth.signInWithEmailAndPassword(email, password).then( user => {
-      
-    }).catch( error => {
-
-    })
+    try{
+      return this.fireAuth.signInWithEmailAndPassword(email, password).then( response => {
+        return response['user']
+      }).catch( error => error)
+    }catch( error ){
+      console.log( error )
+    }
   }
+
+  googleSignIn(){
+    try{
+      return this.fireAuth.signInWithPopup( new firebase.default.auth.GoogleAuthProvider ).then( response => response['user'])
+        .catch( error =>  error);
+    }catch( error ){
+      console.log( error )
+    }
+  }
+
+
+
 }
