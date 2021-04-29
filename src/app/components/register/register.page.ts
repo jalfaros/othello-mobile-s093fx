@@ -1,21 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuthServiceService } from 'src/app/services/auth-service.service';
+import { AuthServiceService } from '../../services/auth-service.service';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
 
-
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  selector: 'app-register',
+  templateUrl: './register.page.html',
+  styleUrls: ['./register.page.scss'],
 })
+export class RegisterPage implements OnInit {
 
 
-export class LoginPage implements OnInit {
-
-  loginForm: FormGroup
+  registForm: FormGroup
 
   constructor(private formBuilder: FormBuilder,
     private fireAuth: AuthServiceService,
@@ -27,11 +25,15 @@ export class LoginPage implements OnInit {
   }
 
   get invalidEmail() {
-    return this.loginForm.get('email').invalid && this.loginForm.get('email').touched
+    return this.registForm.get('email').invalid && this.registForm.get('email').touched
+  }
+
+  get invalidUserName() {
+    return this.registForm.get('userName').invalid && this.registForm.get('userName').touched
   }
 
   get invalidPassword() {
-    return this.loginForm.get('password').invalid && this.loginForm.get('password').touched
+    return this.registForm.get('password').invalid && this.registForm.get('password').touched
   }
 
   async informationToast(message, toastType) {
@@ -47,9 +49,10 @@ export class LoginPage implements OnInit {
   generateForm() {
 
 
-    this.loginForm = this.formBuilder.group({
+    this.registForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      userName: ['', [Validators.required, Validators.minLength(2)]]
     })
   }
 
@@ -68,8 +71,8 @@ export class LoginPage implements OnInit {
 
   onSubmit() {
 
-    if (this.loginForm.invalid) {
-      Object.values(this.loginForm.controls)
+    if (this.registForm.invalid) {
+      Object.values(this.registForm.controls)
         .forEach(iterator => {
 
           if (iterator instanceof FormGroup) {
@@ -84,32 +87,28 @@ export class LoginPage implements OnInit {
         });
       return;
     }
-    this.firebaseLogin(this.loginForm.value);
+    this.firebaseNewUser(this.registForm.value);
+
   }
 
-  firebaseLogin(loginForm) {
+  async firebaseNewUser(form) {
 
-    this.fireAuth.localSignIn(loginForm).then(response => {
-      if (response['message']) {
-        this.informationToast(response['message'], 'danger');
-      } else {
-        this.saveUserInformation(response);
-      }
-    })
+    try {
+      const user = await this.fireAuth.createUser(form).then();
+      console.log(user);
+      this.informationToast('Registrado con éxito!', 'success');
+      this.goLogin();
+
+    } catch (error) {
+      this.informationToast(error.message, 'danger');
+    }
+
   }
 
-  googleAuth() {
-    this.fireAuth.googleSignIn().then(response => {
-      if (response['message']) {
-        this.informationToast(response['message'], 'danger');
-      } else {
-        this.saveUserInformation(response);
-      }
-    });
-  }
 
-  goRegist() {
-    this.router.navigate(['/register']);
+
+  goLogin() {
+    this.router.navigate(['/login']);
   }
 
 }

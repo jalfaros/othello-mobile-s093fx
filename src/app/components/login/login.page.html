@@ -1,4 +1,4 @@
-<ion-header style="text-align: center">
+<ion-header style="text-align: center; margin-bottom: 20%;">
   <ion-toolbar>
     <ion-title>Welcome to Othello</ion-title>
   </ion-toolbar>
@@ -18,7 +18,6 @@
       <form autocomplete="off" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
         <ion-item>
-
           <ion-label position="floating">Email</ion-label>
           <ion-input  
                       formControlName = "email"
@@ -54,6 +53,16 @@
 
 
       </form>
+
+      <div style="text-align: center;
+      margin-top: 10%;" (click)="goRegist()">
+  
+        <a>Create account</a>
+      
+      </div>
+
+
+
 
 
     </ion-card-content>
