@@ -16,8 +16,10 @@ export class AuthServiceService {
 
   localSignIn( {email, password} ){
 
-    console.log(this.fireAuth.signInWithEmailAndPassword(email, password).then( user => {
-      return user
-    }))
+    return this.fireAuth.signInWithEmailAndPassword(email, password).then( user => {
+      
+    }).catch( error => {
+
+    })
   }
 }
