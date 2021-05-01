@@ -1,41 +1,91 @@
-<ion-header>
+
+<ion-header style="text-align: center;">
   <ion-toolbar>
-    <ion-title>board</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="login"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Playing Othello</ion-title>
   </ion-toolbar>
 </ion-header>
 
+<ion-content>    
+  <ion-content>
+    <ion-card >
+      <ion-row>
+        <ion-col>
+          <ion-card style="text-align: center; background-color: cadetblue; color: white;">
+            <h4>
+              {{player1.playerName}}
+            </h4>
+
+            <ion-item>
+            
+              <ion-label>Score:</ion-label>
+              <ion-badge color="dark">{{scorePlayer1}}</ion-badge>
+            </ion-item>
+            
+          </ion-card>
+        </ion-col>
+    
+        <ion-col>
+          <ion-card style="text-align: center; background-color: cadetblue; color: white;">
+            <h4>
+               {{player2.playerName}}
+            </h4>
+
+            <ion-item>
+            
+              <ion-label>Score:</ion-label>
+              <ion-badge color="dark">{{scorePlayer2}}</ion-badge>
+            </ion-item>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+
+      <ion-card style="text-align: center; background-color: teal;">
+
+        <h4 style="color: white;">Playing</h4>
+        
+        <ion-item>
+           <ion-label>
+              {{turnPlayer}}
+           </ion-label> 
+           <ion-badge color="dark">
+             {{color}}
+           </ion-badge>
+        </ion-item>
 
 
-<ion-content style="text-align: center;">
+      </ion-card>
 
-  <ion-card>
-    <ion-card-header>
-      <ion-button (click)="llenar()">
-        llenar
-      </ion-button>
-    </ion-card-header>
+      <ion-card style="text-align: center;  background-color:  #4DCF76;">
 
-    <ion-card-content style="width: 250px; height: 240px; text-align: center;">
-      <div *ngFor="let i of ddData" style="float: left; height: 30px; width: 25px; font-size: 20px; border: 1ch; border-color: white;background-color: darkgreen">
-        <span>
-          &#9679;
-      </span>
-      </div>
-      
-    </ion-card-content>
-  </ion-card>
+        <div class="ion-text-center" style="margin: 5%;" >
+    
+          <div class="ion-no-padding"  *ngFor="let x of gameBoard; let i = index">
+            <ion-col *ngIf="i%8==0" no-padding>
+    
+                  <ion-button class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i]   === 'X' ?'white' :(gameBoard[i]   === 'O' ?'black' :'green')">&#9679;</span></ion-button>
+                  <ion-button class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+1] === 'X' ?'white' :(gameBoard[i+1] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
+                  <ion-button class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+2] === 'X' ?'white' :(gameBoard[i+2] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
+                  <ion-button class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+3] === 'X' ?'white' :(gameBoard[i+3] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
+                  <ion-button class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+4] === 'X' ?'white' :(gameBoard[i+4] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
+                  <ion-button class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+5] === 'X' ?'white' :(gameBoard[i+5] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
+                  <ion-button class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+6] === 'X' ?'white' :(gameBoard[i+6] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
+                  <ion-button class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+7] === 'X' ?'white' :(gameBoard[i+7] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
+            </ion-col>
+          </div>
+        </div>
+      </ion-card>
+      <ion-button style="margin: 10px;" color="dark" shape="round" expand="full">Skip turn</ion-button>
 
+    </ion-card>
 
-
-
-    <div style="height: 240px; width: 200px; text-align: center;">
-
-      
-    </div>
-
-
-
+  </ion-content>
 
 </ion-content>
+
+
+
 
 

@@ -14,7 +14,7 @@ export class GameCreaterService {
 
   constructor(private http: HttpClient) { }
 
-  getPlayerGames(  ) {
+  getPlayerGames() {
     return this.http.get(`${this.BASE_URL}/getPlayerGames?playerId=${this.user.uid}`)
       .pipe(map(res => res['games']));
   }
@@ -22,7 +22,28 @@ export class GameCreaterService {
 
   createGame() {
     return this.http.get(`${this.BASE_URL}/newGame?createdBy=${this.user.uid}`)
-      .pipe(map(res => res ));
+      .pipe(map(res => res));
+  }
+
+  /**
+   * Función para guardar la información del usuario al registrarse
+   * @param params 
+   * @returns 
+   */
+  savePlayerInfo(params) {
+
+    params = JSON.stringify({ params })
+    const headers = { 'Content-Type': 'application/json' };
+    return this.http.post(`${this.BASE_URL}/savePlayerInformation`, { params }, { headers })
+  }
+
+  /**
+   * Funcion para obtener el juego, vada ves que se vaya a la vista de board
+   * @param idGame 
+   * @returns 
+   */
+  getInitialGame(idGame) {
+    return this.http.get(`${this.BASE_URL}/getGame?idGame=${encodeURI(idGame)}`);
   }
 
 

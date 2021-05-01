@@ -1,26 +1,41 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from "@angular/fire/auth";
 import * as firebase from 'firebase';
+import { GameCreaterService } from './game-creater.service';
+import { RegisterPage } from '../components/register/register.page';
+import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthServiceService {
 
-  constructor(public fireAuth: AngularFireAuth) {
+  constructor(
+    public fireAuth: AngularFireAuth,
+    private service: GameCreaterService,
+    private router: Router,
+    private toast: ToastController,
+  ) { }
 
-  }
+  createUser({ email, userName, password }) {
 
+    this.fireAuth.createUserWithEmailAndPassword(email, password)
+      .then(user => {
+        user.user.updateProfile({
+          displayName: userName
+        });
+        this.service.savePlayerInfo({ uid: user.user.uid, displayName: user.user.displayName, email: user.user.email }).subscribe(
+          p => {
+            this.informationToast('Registrado con éxito!', 'success');
+            this.router.navigate(['/login']);
+          });
 
-  async createUser({ email, userName, password }) {
+      }).catch(error => {
+        this.informationToast(error.message, 'danger');
 
-    const newUser = await this.fireAuth.createUserWithEmailAndPassword(email, password);
-    await newUser.user.updateProfile({
-      displayName: userName
-    })
-
-    return newUser;
-
+      });
   }
 
   localSignIn({ email, password }) {
@@ -43,6 +58,15 @@ export class AuthServiceService {
     }
   }
 
+  async informationToast(message, toastType) {
+    const toast = await this.toast.create({
+      message: message,
+      color: toastType,
+      animated: true,
+      duration: 2000
+    });
+    toast.present();
+  }
 
 
 }

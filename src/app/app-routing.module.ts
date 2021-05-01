@@ -6,11 +6,11 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'board'
+    redirectTo: 'login'
   },
   {
     path: 'lobby',
-    loadChildren: () => import('./components/lobby/lobby.module').then( m => m.LobbyPageModule)
+    loadChildren: () => import('./components/lobby/lobby.module').then(m => m.LobbyPageModule)
   },
   {
     path: 'login',
