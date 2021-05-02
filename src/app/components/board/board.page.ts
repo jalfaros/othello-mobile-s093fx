@@ -18,13 +18,15 @@ export class BoardPage implements OnInit {
 
   player1 = {
     playerId: '',
-    playerName: ''
+    playerName: '',
+    score: 0
   };
   scorePlayer1 = 0;
 
   player2 = {
     playerId: '',
-    playerName: ''
+    playerName: '',
+    score: 0
   };
   scorePlayer2 = 0;
 
