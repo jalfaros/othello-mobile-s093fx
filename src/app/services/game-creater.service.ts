@@ -46,5 +46,10 @@ export class GameCreaterService {
     return this.http.get(`${this.BASE_URL}/getGame?idGame=${encodeURI(idGame)}`);
   }
 
+  getAllPlayers(){
+    return this.http.get(`${this.BASE_URL}/getAllPlayers`)
+      .pipe(map(res => res['users'] ));
+  }
+
 
 }

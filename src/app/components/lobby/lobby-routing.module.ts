@@ -7,7 +7,11 @@ const routes: Routes = [
   {
     path: '',
     component: LobbyPage
+  },  {
+    path: 'players',
+    loadChildren: () => import('./modalUser/players/players.module').then( m => m.PlayersPageModule)
   }
+
 ];
 
 @NgModule({
