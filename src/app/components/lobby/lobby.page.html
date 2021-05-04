@@ -55,10 +55,10 @@
 
   <ion-card-content *ngIf="selectedRoom &&  segmentModel === 'settings'">
 
-    <ion-item *ngIf="selectedUser.length !== 0">
+    <ion-item *ngIf="selectedPlayers.length !== 0">
       
       <ion-list>
-        <ion-item *ngFor="let users of selectedUser" >
+        <ion-item *ngFor="let users of selectedPlayers; let i = index;" >
           <ion-row>
             <ion-col>
               <ion-avatar style="margin-right: 5%;">
@@ -73,7 +73,7 @@
               </ion-label>
             </ion-col>
             <ion-col>
-              <ion-button style="margin-top: 2%" color="danger" (click)="deleteSelectedUser()">
+              <ion-button style="margin-top: 2%" color="danger" (click)="deleteSelectedUser( i )">
                 <ion-icon name="trash"></ion-icon>
               </ion-button>
             </ion-col>
@@ -82,7 +82,7 @@
       </ion-list>
     </ion-item> 
 
-    <ion-button   *ngIf="selectedUser.length !== 0"
+    <ion-button   *ngIf="selectedPlayers.length !== 0"
                   style="margin-top: 10%;"
                   expand="block"
                   color="success"
