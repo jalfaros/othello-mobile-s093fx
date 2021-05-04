@@ -10,18 +10,17 @@ export class GameCreaterService {
 
   BASE_URL = 'https://reversi-backend.herokuapp.com';
   LOCAL_URL = 'http://localhost:4000';
-  user = JSON.parse(localStorage.getItem('user'))
 
   constructor(private http: HttpClient) { }
 
-  getPlayerGames() {
-    return this.http.get(`${this.BASE_URL}/getPlayerGames?playerId=${this.user.uid}`)
+  getPlayerGames(idUser) {
+    return this.http.get(`${this.BASE_URL}/getPlayerGames?playerId=${idUser}`)
       .pipe(map(res => res['games']));
   }
 
 
-  createGame() {
-    return this.http.get(`${this.BASE_URL}/newGame?createdBy=${this.user.uid}`)
+  createGame(param) {
+    return this.http.get(`${this.BASE_URL}/newGame?createdBy=${param}`)
       .pipe(map(res => res));
   }
 
@@ -32,7 +31,6 @@ export class GameCreaterService {
    */
   savePlayerInfo(params: any) {
 
-    //params = JSON.stringify({ params })
     const headers = { 'Content-Type': 'application/json' };
     return this.http.post(`${this.LOCAL_URL}/savePlayerInformation`, { params }, { headers })
   }
@@ -57,16 +55,16 @@ export class GameCreaterService {
    * Endpoint para crear una nueva sala
    * @param params 
    */
-  createRoom() {
+  createRoom(idUser) {
     const headers = { 'Content-Type': 'application/json' };
-    return this.http.post(`${this.LOCAL_URL}/createRoom`, { params: { idOwner: this.user.uid } }, { headers })
+    return this.http.post(`${this.LOCAL_URL}/createRoom`, { params: { idOwner: idUser } }, { headers })
   }
 
   /**
    * Endpoint para obtener las salas en las que se encuentra el usuario
    */
-  getRooms() {
-    return this.http.get(`${this.LOCAL_URL}/getRoomsForId?playerId=${this.user.uid}`)
+  getRooms(idUser) {
+    return this.http.get(`${this.LOCAL_URL}/getRoomsForId?playerId=${idUser}`)
   }
 
   /**
@@ -77,6 +75,17 @@ export class GameCreaterService {
 
   getPlayersRoom(param) {
     return this.http.get(`${this.LOCAL_URL}/getGamersOfRoom?roomId=${param}`)
+  }
+
+  /**
+   * Para agregar el segundo jugador a un juego
+   * @param idGame 
+   * @param ndPlayer 
+   * @returns 
+   */
+  addSecondPlayer(idGame, ndPlayer) {
+    const headers = { 'Content-Type': 'application/json' };
+    return this.http.post(`${this.LOCAL_URL}/addPlayer`, { params: { idGame: idGame, ndPlayer: ndPlayer } }, { headers })
   }
 
   /**

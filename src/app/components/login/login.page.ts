@@ -26,6 +26,10 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     this.generateForm();
+
+    if (localStorage.getItem('user')) {
+      this.router.navigateByUrl('/lobby');
+    }
   }
 
   get invalidEmail() {

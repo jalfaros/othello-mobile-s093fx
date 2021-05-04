@@ -27,10 +27,14 @@ export class LobbyPage implements OnInit {
   game; //Me guarda el juego completo que elija
   buttonJoin = false;//Para saber si hay segundo jugador
   addPlayer = false;
+  selectedUser; //El usuario seleccionado para empezar un juego
+  seePlayers: any; //Para ocultar la lista de amigos
+  user = JSON.parse(localStorage.getItem('user'));
 
 
   ngOnInit() {
     this.getRooms();
+
   }
 
   async presentModal() {
@@ -59,21 +63,8 @@ export class LobbyPage implements OnInit {
     toast.present();
   }
 
-  // onCreateGame() {
-  //   this._gameService.createGame().subscribe(res => {
-
-  //     if (!res['idGame']) {
-  //       this.informationToast('Something went wrong creating the game!', 'danger');
-  //       return;
-  //     }
-  //     this.informationToast('Game created succesfully', 'success')
-  //     this.playerGames.push(res['idGame']);
-
-  //   });
-  // }
-
   createRoom() {
-    this._gameService.createRoom().subscribe(res => {
+    this._gameService.createRoom(this.user.uid).subscribe(res => {
 
       if (!res['idRoom']) {
         this.informationToast('Something went wrong creating the room!', 'danger');
@@ -81,14 +72,12 @@ export class LobbyPage implements OnInit {
       } else {
         this.informationToast('Room created succesfully', 'success')
         this.rooms.push(res['idRoom']);
-
       }
     })
-
   }
 
   getRooms() {
-    this._gameService.getRooms().subscribe((response: any) => {
+    this._gameService.getRooms(this.user.uid).subscribe((response: any) => {
 
       response.rooms.forEach(data => {
         this.rooms.push(data)
@@ -99,10 +88,10 @@ export class LobbyPage implements OnInit {
 
   addUserRoom() {
 
-    const usersCollection = JSON.stringify( this.selectedPlayers );
-  
+    const usersCollection = JSON.stringify(this.selectedPlayers);
+
     this._gameService.addPlayerRoom({ idRoom: this.selectedRoom, usersCollection }).subscribe(res => {
-    
+
       if (!res['success']) {
         this.informationToast('Something went wrong adding the user!', 'danger');
         return;
@@ -113,48 +102,34 @@ export class LobbyPage implements OnInit {
         this.informationToast('Users added sucessfully', 'success');
       }
     })
-
-
   }
-
-  // getAllGames() {
-  //   this._gameService.getPlayerGames().subscribe(response => {
-  //     this.playerGames = response;
-  //   });
-  // }
-
-
 
   onChangeRoom(event) {
     this.getGamesRoom(event.target.value);
-    this.selectedUser = [];
-
+    this.selectedPlayers = [];
+    this.getPlayersRoom();
   }
 
   getGamesRoom(params) {
     this._gameService.getGamesRooms(params).subscribe(({ gamesRoom }: any) => {
 
       this.games = gamesRoom;
-
       this.selectedPlayers = [];
 
     })
   }
 
-  onChangeGame(event) {
+  onChangeGame() {
 
     this._gameService.getInitialGame(this.selectedGame.idGame).subscribe((data: any) => {
 
-
       this.game = data.game;
 
-      if (this.game.player2.playerId) { this.buttonJoin = true }
-      else { this.addPlayer = true };
+      if (this.game.player2.playerId) { this.buttonJoin = true; this.addPlayer = false; }
+      else { this.addPlayer = true; this.buttonJoin = false; };
 
-      this._gameService.getPlayersRoom(this.selectedRoom).subscribe((data: any) => {
-        this.playersRoom = data.playersRoom;
-
-      });
+      this.getPlayersRoom();
+      console.log(this.game);
 
     });
 
@@ -165,19 +140,21 @@ export class LobbyPage implements OnInit {
 
   }
 
+  getPlayersRoom() {
+    this._gameService.getPlayersRoom(this.selectedRoom).subscribe((data: any) => {
+      this.playersRoom = data.playersRoom;
+    });
+  }
 
-
-  deleteSelectedUser( userIndex ) {
-    this.selectedPlayers.splice( userIndex, 1 )
+  deleteSelectedUser(userIndex) {
+    this.selectedPlayers.splice(userIndex, 1)
   }
 
 
   addGameRoom() {
-    this._gameService.createGame().subscribe(res => {
+    this._gameService.createGame(this.user.uid).subscribe(res => {
 
       if (!res['idGame']) return;
-
-      console.log(res['idGame']);
 
       this.games.push(res['idGame']);
 
@@ -191,15 +168,28 @@ export class LobbyPage implements OnInit {
           this.getGamesRoom(this.selectedRoom);
 
         }
-
       })
-
     });
 
   }
 
+  startGame() {
+    this._gameService.addSecondPlayer(this.selectedGame.idGame, this.selectedUser).subscribe(res => {
+      if (!res['success']) return;
 
+      this.buttonJoin = false;//Para saber si hay segundo jugador
+      this.addPlayer = false;
 
+    })
+  }
+
+  logOut() {
+    localStorage.removeItem('user');
+  }
+
+  seeListFriends() {
+    this.seePlayers = !this.seePlayers;
+  }
 
 
 }
