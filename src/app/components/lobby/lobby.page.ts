@@ -191,7 +191,10 @@ export class LobbyPage implements OnInit {
 
   getMessages(){
     this._chatService.getMessagesChat().subscribe( res => {
-      this.messages = res;
+      this.messages = []
+      for (const msg of res) {
+        this.messages.unshift( msg )
+      }
     })
   }
 

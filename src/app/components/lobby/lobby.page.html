@@ -146,19 +146,22 @@
 
     <ion-card-content>
 
-      <div style="text-align: right; font-size: smaller;" *ngFor="let msg of messages">
-        <div *ngIf="msg.uidPlayer == user.uid && msg.roomId == selectedRoom">
+      <div style="font-size: smaller;" *ngFor="let msg of messages">
+
+        <div *ngIf="msg.uidPlayer == user.uid && msg.roomId == selectedRoom" style="text-align: right;">
           <span><ion-badge color="secondary"> {{ msg.displayName }} </ion-badge></span>
           <p>{{ msg.message }}</p>
         </div>
-      </div>
 
-      <div style="text-align: left; font-size: smaller;" *ngFor="let msg of messages">
         <div *ngIf="msg.uidPlayer !== user.uid && msg.roomId == selectedRoom">
           <span><ion-badge color="success"> {{ msg.displayName }} </ion-badge></span>
           <p>{{ msg.message }}</p>
         </div>
+
+
       </div>
+
+
 
     </ion-card-content>
 

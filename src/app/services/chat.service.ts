@@ -27,7 +27,7 @@ export class ChatService {
 
 
   getMessagesChat(){
-    return this.afs.collection('messages', ref => ref.orderBy('messageTime','asc')).valueChanges()
+    return this.afs.collection('messages', ref => ref.orderBy('messageTime','desc')).valueChanges()
   }
 
 
