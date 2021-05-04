@@ -9,7 +9,7 @@ export class GameCreaterService {
 
 
   BASE_URL = 'https://reversi-backend.herokuapp.com';
-  LOCAL_URL = 'localhost:4200';
+  LOCAL_URL = 'http://localhost:4000';
   user = JSON.parse(localStorage.getItem('user'))
 
   constructor(private http: HttpClient) { }
@@ -46,10 +46,52 @@ export class GameCreaterService {
     return this.http.get(`${this.BASE_URL}/getGame?idGame=${encodeURI(idGame)}`);
   }
 
-  getAllPlayers(){
+  getAllPlayers() {
     return this.http.get(`${this.BASE_URL}/getAllPlayers`)
-      .pipe(map(res => res['users'] ));
+      .pipe(map(res => res['users']));
   }
 
+
+  //------------------------------SERVICIOS DE LA SALA-----------------------------------
+  /**
+   * Endpoint para crear una nueva sala
+   * @param params 
+   */
+  createRoom() {
+    const headers = { 'Content-Type': 'application/json' };
+    return this.http.post(`${this.LOCAL_URL}/createRoom`, { params: { idOwner: this.user.uid } }, { headers })
+  }
+
+  /**
+   * Endpoint para obtener las salas en las que se encuentra el usuario
+   */
+  getRooms() {
+    return this.http.get(`${this.LOCAL_URL}/getRoomsForId?playerId=${this.user.uid}`)
+  }
+
+  /**
+   * Endpoint para obtener los jugadores de una sala
+   * @param param 
+   * @returns 
+   */
+
+  getPlayersRoom(param) {
+    return this.http.get(`${this.LOCAL_URL}/getGamersOfRoom?roomId=${param}`)
+  }
+
+  /**
+   * Enpoint para agregar amigos a la sala
+   * @param param 
+   * @returns 
+   */
+  addPlayerRoom(param) {
+    const headers = { 'Content-Type': 'application/json' };
+    return this.http.post(`${this.LOCAL_URL}/addFriendRoom`, { params: param }, { headers })
+  }
+
+  //Enpoint para obtener los juegos  de la sala
+  getGamesRooms(param) {
+    return this.http.get(`${this.LOCAL_URL}/getGamesOfRoom?roomId=${param}`)
+  }
 
 }

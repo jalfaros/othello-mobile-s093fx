@@ -60,12 +60,9 @@ export class LoginPage implements OnInit {
       displayName: response.displayName,
       email: response.email
     }));
-
     this.informationToast(`Bienvenido: ${response.displayName}`, 'dark');
     this.router.navigate(['/lobby']);
-
-  } 
-
+  }
 
   onSubmit() {
 

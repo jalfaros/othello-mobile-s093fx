@@ -12,16 +12,16 @@
 
 <ion-content>
   <ion-card>
-    <ion-card-header>
+    <ion-card-header  style="margin-top: 35px;">
       
     <ion-segment [(ngModel)]="segmentModel">
       
       <ion-segment-button value="settings">
-        <ion-label>Game Settings</ion-label>
+        <ion-label>Rooms</ion-label>
       </ion-segment-button>
       
-      <ion-segment-button value="players" disabled = "true" >
-        <ion-label>Players</ion-label>
+      <ion-segment-button value="room" [disabled]="!selectedRoom">
+        <ion-label>Room</ion-label>
       </ion-segment-button>
     
   
@@ -32,75 +32,100 @@
 
   <ion-card-content *ngIf="segmentModel === 'settings'">
 
-    <ion-item [disabled] = "playerGames.length === 0">
-      <ion-label>Games</ion-label>
-      <ion-select (ionChange)="onSegmentChange($event)" 
+    <ion-item [disabled] = "rooms.length === 0">
+      <ion-label>Select room</ion-label>
+      <ion-select 
+                  (ionChange)="onChangeRoom($event)"
                   interface = "popover" 
-                  [(ngModel)]="selectedGame" 
-                  placeholder="Select one">
-        <ion-select-option *ngFor="let game of playerGames; let i = index" [value] = "playerGames[i]">{{ game }}</ion-select-option>
+                  [(ngModel)]="selectedRoom" 
+                  placeholder="Select one"
+                  >
+        <ion-select-option *ngFor="let game of rooms; let i = index" [value] = "rooms[i]">{{ game }}</ion-select-option>
       </ion-select>
     </ion-item>
 
-    <ion-button (click)="onCreateGame()"
+    <ion-button (click)="createRoom()"
                 expand="block" 
                 color = "success"
                 style="margin-top: 10%;"
-    >New game
+    >New Room
     </ion-button>
 
   </ion-card-content>
 
-  <ion-card-content *ngIf="segmentModel === 'players'">
+  <ion-card-content *ngIf="selectedRoom &&  segmentModel === 'settings'">
 
-    <ion-item *ngIf="selectedUser">
-      <ion-avatar style="margin-right: 5%;">
-        <img src="../../../assets/icon/avatar.png">
-      </ion-avatar>
-      <ion-label>
-        <h1>Second player</h1>
-        <div style="margin-top: 5%;">
-          <h2>{{ selectedUser.displayName }}</h2>
-          <h3>{{ selectedUser.email }}</h3>
-          <p>{{ selectedUser.uid }}</p>
-        </div>
-      </ion-label>
-      <ion-button style="margin-top: 5%" color="danger" (click)="deleteSelectedUser()">
-        <ion-icon name="trash"></ion-icon>
-      </ion-button>
-
+    <ion-item *ngIf="selectedUser.length !== 0">
+      
+      <ion-list>
+        <ion-item *ngFor="let users of selectedUser" >
+          <ion-row>
+            <ion-col>
+              <ion-avatar style="margin-right: 5%;">
+                <img src="../../../assets/icon/avatar.png">
+              </ion-avatar>
+              <ion-label>
+                <div style="margin-top: 5%;">
+                  <h2>{{ users.displayName }}</h2>
+                  <h3>{{ users.email }}</h3>
+                  <p>{{ users.uid }}</p>
+                </div>
+              </ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-button style="margin-top: 2%" color="danger" (click)="deleteSelectedUser()">
+                <ion-icon name="trash"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-item>
+      </ion-list>
     </ion-item> 
 
-    <ion-button   *ngIf="selectedUser"
+    <ion-button   *ngIf="selectedUser.length !== 0"
                   style="margin-top: 10%;"
                   expand="block"
                   color="success"
+                  (click)="addUserRoom()"
       >
-      Play
+      Add the users to room
       </ion-button>
-    
 
-      <ion-button *ngIf="!selectedUser"
-                  style="margin-top: 10%;"
-                  expand="block"
-                  color="secondary"
-      >
-      Individual game
-      </ion-button>
-      
       <ion-button (click)="onMultiplayerClick()"
                   style="margin-top: 10%;"
                   expand="block"
                   color="medium"
       >
-      Multiplayer game
+      Add friends to room
       </ion-button>
 
     
   </ion-card-content>
 
+  <!-- Select del lado de room -->
 
+  <ion-card-content *ngIf="segmentModel === 'room'">
 
+    <ion-item [disabled] = "rooms.length === 0">
+      <ion-label>Select game</ion-label>
+      <ion-select 
+                  interface = "popover" 
+                  [(ngModel)]="selectedRoom" 
+                  placeholder="Select one"
+                  >
+                  
+        <ion-select-option *ngFor="let game of rooms; let i = index" [value] = "rooms[i]">{{ game }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-button (click)="createRoom()"
+                expand="block" 
+                color = "success"
+                style="margin-top: 10%;"
+    >Join game
+    </ion-button>
+
+  </ion-card-content>
 
   </ion-card>
 </ion-content>
