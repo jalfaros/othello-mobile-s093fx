@@ -105,10 +105,7 @@
   <!-- Select del lado de room -->
 
   <ion-card-content *ngIf="segmentModel === 'room'">
-
-    <ion-label>
-      PROBANDO
-    </ion-label>
+    
     <ion-item [disabled] = "games.length === 0">
       <ion-label>Select game</ion-label>
       <ion-select 
@@ -140,4 +137,42 @@
   </ion-card-content>
 
   </ion-card>
+
+
+  <ion-card *ngIf="segmentModel == 'room' ">
+    <ion-card-header>
+      <h3>Room Chat</h3>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <div style="text-align: right; font-size: smaller;" *ngFor="let msg of messages">
+        <div *ngIf="msg.uidPlayer == user.uid && msg.roomId == selectedRoom">
+          <span><ion-badge color="secondary"> {{ msg.displayName }} </ion-badge></span>
+          <p>{{ msg.message }}</p>
+        </div>
+      </div>
+
+      <div style="text-align: left; font-size: smaller;" *ngFor="let msg of messages">
+        <div *ngIf="msg.uidPlayer !== user.uid && msg.roomId == selectedRoom">
+          <span><ion-badge color="success"> {{ msg.displayName }} </ion-badge></span>
+          <p>{{ msg.message }}</p>
+        </div>
+      </div>
+
+    </ion-card-content>
+
+    <ion-item style="margin-bottom: 5%;">
+      <ion-input  placeholder = "Message..."
+                  [(ngModel)]="chatMessage"
+      >
+      </ion-input>
+      <ion-button color="light" (click)="sendMessage()">
+        <ion-icon name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  
+  </ion-card> 
+
+
 </ion-content>

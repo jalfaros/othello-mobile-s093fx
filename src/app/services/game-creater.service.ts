@@ -52,62 +52,49 @@ export class GameCreaterService {
   }
 
 
-  //------------------------------SERVICIOS DE LA SALA-----------------------------------
-  /**
-   * Endpoint para crear una nueva sala
-   * @param params 
-   */
+
+
+
   createRoom() {
     const headers = { 'Content-Type': 'application/json' };
     return this.http.post(`${this.LOCAL_URL}/createRoom`, { params: { idOwner: this.user.uid } }, { headers })
   }
 
-  /**
-   * Endpoint para obtener las salas en las que se encuentra el usuario
-   */
+
   getRooms() {
     return this.http.get(`${this.LOCAL_URL}/getRoomsForId?playerId=${this.user.uid}`)
   }
 
-  /**
-   * Endpoint para obtener los jugadores de una sala
-   * @param param 
-   * @returns 
-   */
 
   getPlayersRoom(param) {
     return this.http.get(`${this.LOCAL_URL}/getGamersOfRoom?roomId=${param}`)
   }
 
-  /**
-   * Enpoint para agregar amigos a la sala
-   * @param param 
-   * @returns 
-   */
-  addPlayerRoom(param) {
+
+
+  addPlayerRoom( param ) {
+
+
     const headers = { 'Content-Type': 'application/json' };
     return this.http.post(`${this.LOCAL_URL}/addFriendRoom`, { params: param }, { headers })
   }
 
 
-  /**
-   * Enpoint para obtener los juegos  de la sala
-   * @param param 
-   * @returns 
-   */
+
+
+
   getGamesRooms(param) {
     return this.http.get(`${this.LOCAL_URL}/getGamesOfRoom?roomId=${param}`)
   }
 
-  /**
-   * Funcion para agregar el id del juego creado a la sala
-   * @param room 
-   * @param game 
-   * @returns 
-   */
+
+
+
+
   addGameRoom(room, game) {
+
     const headers = { 'Content-Type': 'application/json' };
-    return this.http.post(`${this.LOCAL_URL}/addGameRoom`, { params: { idRoom: room, idGame: game } }, { headers });
+    return this.http.post(`${this.LOCAL_URL}/addGameRoom`, { params: { idRoom: room, uidUser: this.user.uid    } }, { headers });
   }
 
 }

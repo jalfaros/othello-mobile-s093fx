@@ -3,7 +3,9 @@ import { NavParams, ToastController } from '@ionic/angular';
 import { GameCreaterService } from '../../services/game-creater.service'
 import { ModalController } from '@ionic/angular'
 import { PlayersPage } from './modalUser/players/players.page';
-import { Game } from 'src/app/models/Game';
+import { ChatService } from 'src/app/services/chat.service';
+
+
 
 @Component({
   selector: 'app-lobby',
@@ -15,6 +17,7 @@ export class LobbyPage implements OnInit {
   constructor(private _gameService: GameCreaterService,
     private toast: ToastController,
     public modalController: ModalController,
+    private _chatService : ChatService
   ) { }
 
   segmentModel = "settings";
@@ -22,15 +25,20 @@ export class LobbyPage implements OnInit {
   rooms = [];
   selectedRoom;
   selectedUser = [];
-  games = []; //Se guarda la lista de juegos de la sala
-  selectedGame; //Juego que se elija en el select
-  game; //Me guarda el juego completo que elija
-  buttonJoin = false;//Para saber si hay segundo jugador
+  games = [];
+  selectedGame;
+  game;
+  buttonJoin = false;
   addPlayer = false;
+  chatMessage = '';
+  messages = []
+
+  user = JSON.parse( localStorage.getItem('user') )
 
 
   ngOnInit() {
     this.getRooms();
+    this.getMessages()
   }
 
   async presentModal() {
@@ -59,22 +67,9 @@ export class LobbyPage implements OnInit {
     toast.present();
   }
 
-  // onCreateGame() {
-  //   this._gameService.createGame().subscribe(res => {
-
-  //     if (!res['idGame']) {
-  //       this.informationToast('Something went wrong creating the game!', 'danger');
-  //       return;
-  //     }
-  //     this.informationToast('Game created succesfully', 'success')
-  //     this.playerGames.push(res['idGame']);
-
-  //   });
-  // }
 
   createRoom() {
     this._gameService.createRoom().subscribe(res => {
-
       if (!res['idRoom']) {
         this.informationToast('Something went wrong creating the room!', 'danger');
         return;
@@ -98,27 +93,24 @@ export class LobbyPage implements OnInit {
   }
 
   addUserRoom() {
-    // this._gameService.addPlayerRoom({ idRoom: this.selectedRoom, uid: this.selectedUser.uid }).subscribe(res => {
-    //   if (!res['success']) {
-    //     this.informationToast('Something went wrong adding the user!', 'danger');
-    //     return;
 
-    //   } else {
-    //     this.informationToast('User adding to room', 'success');
-    //     this.deleteSelectedUser();
-    //   }
-    // })
 
-    console.log(this.selectedUser);
-    this.selectedUser = [];
+    var selectedPlayers = JSON.stringify(this.selectedUser)
+
+    this._gameService.addPlayerRoom({ idRoom: this.selectedRoom, usersCollection: selectedPlayers }).subscribe(res => {
+      if (!res['success']) {
+        this.informationToast('Something went wrong adding the users!', 'danger');
+        return;
+
+      } else {
+        this.selectedUser = [];
+        this.informationToast('Users saved succesfully', 'success');
+      }
+    })
+
 
   }
 
-  // getAllGames() {
-  //   this._gameService.getPlayerGames().subscribe(response => {
-  //     this.playerGames = response;
-  //   });
-  // }
 
   onChangeRoom(event) {
     this.getGamesRoom(event.target.value);
@@ -128,7 +120,6 @@ export class LobbyPage implements OnInit {
 
   getGamesRoom(params) {
     this._gameService.getGamesRooms(params).subscribe(({ gamesRoom }: any) => {
-
       this.games = gamesRoom;
 
     })
@@ -164,23 +155,20 @@ export class LobbyPage implements OnInit {
 
 
   addGameRoom() {
+
     this._gameService.createGame().subscribe(res => {
-
       if (!res['idGame']) return;
-
-      console.log(res['idGame']);
 
       this.games.push(res['idGame']);
 
       this._gameService.addGameRoom(this.selectedRoom, res['idGame']).subscribe(data => {
-        console.log(data);
+
         if (!data['success']) {
           this.informationToast('Something went wrong creating the game!', 'danger')
 
         } else {
-          this.informationToast('Game created!', 'success');
+          this.informationToast('Game created succesfully!', 'success');
           this.getGamesRoom(this.selectedRoom);
-
         }
 
       })
@@ -188,6 +176,26 @@ export class LobbyPage implements OnInit {
     });
 
   }
+
+
+  sendMessage(){
+
+    if ( this.chatMessage.trim().length > 0 ){
+      this._chatService.addMessageChat( this.selectedRoom, this.chatMessage ).then( res => {
+        this.chatMessage = ''
+      }).catch( err =>  {
+        this.chatMessage = ''
+      })
+    }
+  }
+
+  getMessages(){
+    this._chatService.getMessagesChat().subscribe( res => {
+      this.messages = res;
+    })
+  }
+
+
 
 
 
