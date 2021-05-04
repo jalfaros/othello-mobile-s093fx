@@ -21,7 +21,7 @@ export class LobbyPage implements OnInit {
   playersRoom = [];
   rooms = [];
   selectedRoom;
-  selectedUser = [];
+  selectedPlayers = [];
   games = []; //Se guarda la lista de juegos de la sala
   selectedGame; //Juego que se elija en el select
   game; //Me guarda el juego completo que elija
@@ -41,7 +41,7 @@ export class LobbyPage implements OnInit {
     modal.onDidDismiss().then((user: any) => {
       if (user.data !== undefined) {
         var user_selected = user['data']['user']
-        this.selectedUser.push(user_selected);
+        this.selectedPlayers.push(user_selected);
       }
 
     })
@@ -98,19 +98,22 @@ export class LobbyPage implements OnInit {
   }
 
   addUserRoom() {
-    // this._gameService.addPlayerRoom({ idRoom: this.selectedRoom, uid: this.selectedUser.uid }).subscribe(res => {
-    //   if (!res['success']) {
-    //     this.informationToast('Something went wrong adding the user!', 'danger');
-    //     return;
 
-    //   } else {
-    //     this.informationToast('User adding to room', 'success');
-    //     this.deleteSelectedUser();
-    //   }
-    // })
+    const usersCollection = JSON.stringify( this.selectedPlayers );
+  
+    this._gameService.addPlayerRoom({ idRoom: this.selectedRoom, usersCollection }).subscribe(res => {
+    
+      if (!res['success']) {
+        this.informationToast('Something went wrong adding the user!', 'danger');
+        return;
 
-    console.log(this.selectedUser);
-    this.selectedUser = [];
+      } else {
+        this.informationToast('Adding users...', 'success');
+        this.selectedPlayers = []
+        this.informationToast('Users added sucessfully', 'success');
+      }
+    })
+
 
   }
 
@@ -119,6 +122,8 @@ export class LobbyPage implements OnInit {
   //     this.playerGames = response;
   //   });
   // }
+
+
 
   onChangeRoom(event) {
     this.getGamesRoom(event.target.value);
@@ -130,6 +135,8 @@ export class LobbyPage implements OnInit {
     this._gameService.getGamesRooms(params).subscribe(({ gamesRoom }: any) => {
 
       this.games = gamesRoom;
+
+      this.selectedPlayers = [];
 
     })
   }
@@ -158,8 +165,10 @@ export class LobbyPage implements OnInit {
 
   }
 
-  deleteSelectedUser(i) {
-    this.selectedUser.splice(i, 1);
+
+
+  deleteSelectedUser( userIndex ) {
+    this.selectedPlayers.splice( userIndex, 1 )
   }
 
 

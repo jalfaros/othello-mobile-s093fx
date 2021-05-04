@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from "@angular/fire/auth";
 import * as firebase from 'firebase';
 import { GameCreaterService } from './game-creater.service';
-import { RegisterPage } from '../components/register/register.page';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 
@@ -10,6 +9,8 @@ import { ToastController } from '@ionic/angular';
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class AuthServiceService {
 
   constructor(
