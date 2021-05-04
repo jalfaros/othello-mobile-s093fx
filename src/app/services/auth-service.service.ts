@@ -26,7 +26,7 @@ export class AuthServiceService {
         user.user.updateProfile({
           displayName: userName
         });
-        this.service.savePlayerInfo({ uid: user.user.uid, displayName: user.user.displayName, email: user.user.email }).subscribe(
+        this.service.savePlayerInfo({ uid: user.user.uid, displayName: userName, email: user.user.email }).subscribe(
           p => {
             this.informationToast('Registrado con éxito!', 'success');
             this.router.navigate(['/login']);

@@ -30,11 +30,11 @@ export class GameCreaterService {
    * @param params 
    * @returns 
    */
-  savePlayerInfo(params) {
+  savePlayerInfo(params: any) {
 
-    params = JSON.stringify({ params })
+    //params = JSON.stringify({ params })
     const headers = { 'Content-Type': 'application/json' };
-    return this.http.post(`${this.BASE_URL}/savePlayerInformation`, { params }, { headers })
+    return this.http.post(`${this.LOCAL_URL}/savePlayerInformation`, { params }, { headers })
   }
 
   /**
@@ -43,7 +43,7 @@ export class GameCreaterService {
    * @returns 
    */
   getInitialGame(idGame) {
-    return this.http.get(`${this.BASE_URL}/getGame?idGame=${encodeURI(idGame)}`);
+    return this.http.get(`${this.LOCAL_URL}/getGame?idGame=${idGame}`);
   }
 
   getAllPlayers() {
@@ -89,9 +89,25 @@ export class GameCreaterService {
     return this.http.post(`${this.LOCAL_URL}/addFriendRoom`, { params: param }, { headers })
   }
 
-  //Enpoint para obtener los juegos  de la sala
+
+  /**
+   * Enpoint para obtener los juegos  de la sala
+   * @param param 
+   * @returns 
+   */
   getGamesRooms(param) {
     return this.http.get(`${this.LOCAL_URL}/getGamesOfRoom?roomId=${param}`)
+  }
+
+  /**
+   * Funcion para agregar el id del juego creado a la sala
+   * @param room 
+   * @param game 
+   * @returns 
+   */
+  addGameRoom(room, game) {
+    const headers = { 'Content-Type': 'application/json' };
+    return this.http.post(`${this.LOCAL_URL}/addGameRoom`, { params: { idRoom: room, idGame: game } }, { headers });
   }
 
 }

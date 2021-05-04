@@ -3,6 +3,7 @@ import { NavParams, ToastController } from '@ionic/angular';
 import { GameCreaterService } from '../../services/game-creater.service'
 import { ModalController } from '@ionic/angular'
 import { PlayersPage } from './modalUser/players/players.page';
+import { Game } from 'src/app/models/Game';
 
 @Component({
   selector: 'app-lobby',
@@ -17,11 +18,15 @@ export class LobbyPage implements OnInit {
   ) { }
 
   segmentModel = "settings";
-  playerGames = [];
+  playersRoom = [];
   rooms = [];
   selectedRoom;
   selectedUser = [];
   games = []; //Se guarda la lista de juegos de la sala
+  selectedGame; //Juego que se elija en el select
+  game; //Me guarda el juego completo que elija
+  buttonJoin = false;//Para saber si hay segundo jugador
+  addPlayer = false;
 
 
   ngOnInit() {
@@ -54,18 +59,18 @@ export class LobbyPage implements OnInit {
     toast.present();
   }
 
-  onCreateGame() {
-    this._gameService.createGame().subscribe(res => {
+  // onCreateGame() {
+  //   this._gameService.createGame().subscribe(res => {
 
-      if (!res['idGame']) {
-        this.informationToast('Something went wrong creating the game!', 'danger');
-        return;
-      }
-      this.informationToast('Game created succesfully', 'success')
-      this.playerGames.push(res['idGame']);
+  //     if (!res['idGame']) {
+  //       this.informationToast('Something went wrong creating the game!', 'danger');
+  //       return;
+  //     }
+  //     this.informationToast('Game created succesfully', 'success')
+  //     this.playerGames.push(res['idGame']);
 
-    });
-  }
+  //   });
+  // }
 
   createRoom() {
     this._gameService.createRoom().subscribe(res => {
@@ -105,6 +110,7 @@ export class LobbyPage implements OnInit {
     // })
 
     console.log(this.selectedUser);
+    this.selectedUser = [];
 
   }
 
@@ -115,12 +121,36 @@ export class LobbyPage implements OnInit {
   // }
 
   onChangeRoom(event) {
-    this._gameService.getGamesRooms(event.target.value).subscribe(({ gamesRoom }: any) => {
+    this.getGamesRoom(event.target.value);
+    this.selectedUser = [];
+
+  }
+
+  getGamesRoom(params) {
+    this._gameService.getGamesRooms(params).subscribe(({ gamesRoom }: any) => {
+
       this.games = gamesRoom;
 
-      this.selectedUser = [];
-
     })
+  }
+
+  onChangeGame(event) {
+
+    this._gameService.getInitialGame(this.selectedGame.idGame).subscribe((data: any) => {
+
+
+      this.game = data.game;
+
+      if (this.game.player2.playerId) { this.buttonJoin = true }
+      else { this.addPlayer = true };
+
+      this._gameService.getPlayersRoom(this.selectedRoom).subscribe((data: any) => {
+        this.playersRoom = data.playersRoom;
+
+      });
+
+    });
+
   }
 
   onMultiplayerClick() {
@@ -128,11 +158,36 @@ export class LobbyPage implements OnInit {
 
   }
 
-  deleteSelectedUser() {
-    this.selectedUser = undefined;
+  deleteSelectedUser(i) {
+    this.selectedUser.splice(i, 1);
   }
 
 
+  addGameRoom() {
+    this._gameService.createGame().subscribe(res => {
+
+      if (!res['idGame']) return;
+
+      console.log(res['idGame']);
+
+      this.games.push(res['idGame']);
+
+      this._gameService.addGameRoom(this.selectedRoom, res['idGame']).subscribe(data => {
+        console.log(data);
+        if (!data['success']) {
+          this.informationToast('Something went wrong creating the game!', 'danger')
+
+        } else {
+          this.informationToast('Game created!', 'success');
+          this.getGamesRoom(this.selectedRoom);
+
+        }
+
+      })
+
+    });
+
+  }
 
 
 

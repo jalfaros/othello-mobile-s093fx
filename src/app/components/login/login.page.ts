@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthServiceService } from 'src/app/services/auth-service.service';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { GameCreaterService } from '../../services/game-creater.service';
 
 
 
@@ -20,7 +21,8 @@ export class LoginPage implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private fireAuth: AuthServiceService,
     private toast: ToastController,
-    private router: Router) { }
+    private router: Router,
+    private service: GameCreaterService) { }
 
   ngOnInit() {
     this.generateForm();
@@ -60,8 +62,15 @@ export class LoginPage implements OnInit {
       displayName: response.displayName,
       email: response.email
     }));
-    this.informationToast(`Bienvenido: ${response.displayName}`, 'dark');
-    this.router.navigate(['/lobby']);
+
+    this.service.savePlayerInfo({ uid: response.uid, displayName: response.displayName, email: response.email }).subscribe(res => {
+
+      if (!res['success']) return;
+
+      this.informationToast(`Bienvenido: ${response.displayName}`, 'dark');
+      this.router.navigate(['/lobby']);
+    })
+
   }
 
   onSubmit() {
