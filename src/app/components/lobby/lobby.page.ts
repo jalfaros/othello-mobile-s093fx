@@ -58,7 +58,7 @@ export class LobbyPage implements OnInit {
       message: message,
       color: toastType,
       animated: true,
-      duration: 2000,
+      duration: 3000,
     });
     toast.present();
   }
@@ -99,6 +99,7 @@ export class LobbyPage implements OnInit {
       } else {
         this.informationToast('Adding users...', 'success');
         this.selectedPlayers = []
+        this.getPlayersRoom();
         this.informationToast('Users added sucessfully', 'success');
       }
     })
@@ -129,8 +130,7 @@ export class LobbyPage implements OnInit {
       else { this.addPlayer = true; this.buttonJoin = false; };
 
       this.getPlayersRoom();
-      console.log(this.game);
-
+      this.saveIdGame();
     });
 
   }
@@ -159,7 +159,6 @@ export class LobbyPage implements OnInit {
       this.games.push(res['idGame']);
 
       this._gameService.addGameRoom(this.selectedRoom, res['idGame']).subscribe(data => {
-        console.log(data);
         if (!data['success']) {
           this.informationToast('Something went wrong creating the game!', 'danger')
 
@@ -179,8 +178,12 @@ export class LobbyPage implements OnInit {
 
       this.buttonJoin = false;//Para saber si hay segundo jugador
       this.addPlayer = false;
-
+      this.saveIdGame();
     })
+  }
+
+  saveIdGame() {
+    localStorage.setItem('idGame', this.selectedGame.idGame);
   }
 
   logOut() {

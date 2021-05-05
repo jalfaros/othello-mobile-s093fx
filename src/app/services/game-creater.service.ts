@@ -19,11 +19,36 @@ export class GameCreaterService {
   }
 
 
+  /**
+   * Funcion para crear un nuevo juego
+   * @param param 
+   * @returns 
+   */
   createGame(param) {
     return this.http.get(`${this.BASE_URL}/newGame?createdBy=${param}`)
       .pipe(map(res => res));
   }
 
+
+  /**
+   * Funcion del click en el tablero
+   * @param params 
+   * @returns 
+   */
+  postClickGame(params) {
+    const headers = { 'Content-Type': 'application/json' };
+    return this.http.post(`${this.LOCAL_URL}/editGame`, { params }, { headers })
+  }
+
+  /**
+   * Funcion para saltar de turno en el juego
+   * @param params 
+   * @returns 
+   */
+  editSkipTurn(params) {
+    const headers = { 'Content-Type': 'application/json' };
+    return this.http.post(`${this.LOCAL_URL}/skipTurn`, { params }, { headers })
+  }
   /**
    * Función para guardar la información del usuario al registrarse
    * @param params 
@@ -36,7 +61,7 @@ export class GameCreaterService {
   }
 
   /**
-   * Funcion para obtener el juego, vada ves que se vaya a la vista de board
+   * Funcion para obtener el juego, cada ves que se vaya a la vista de board
    * @param idGame 
    * @returns 
    */

@@ -2,7 +2,7 @@
 <ion-header style="text-align: center;">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="login"></ion-back-button>
+      <ion-back-button defaultHref="lobby"></ion-back-button>
     </ion-buttons>
     <ion-title>Playing Othello</ion-title>
   </ion-toolbar>
@@ -10,7 +10,7 @@
 
 <ion-content>    
   <ion-content>
-    <ion-card >
+    <ion-card *ngIf="!endedGame">
       <ion-row>
         <ion-col>
           <ion-card style="text-align: center; background-color: cadetblue; color: white;">
@@ -65,20 +65,55 @@
           <div class="ion-no-padding"  *ngFor="let x of gameBoard; let i = index">
             <ion-col *ngIf="i%8==0" no-padding>
     
-                  <ion-button class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i]   === 'X' ?'white' :(gameBoard[i]   === 'O' ?'black' :'green')">&#9679;</span></ion-button>
-                  <ion-button class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+1] === 'X' ?'white' :(gameBoard[i+1] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
-                  <ion-button class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+2] === 'X' ?'white' :(gameBoard[i+2] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
-                  <ion-button class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+3] === 'X' ?'white' :(gameBoard[i+3] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
-                  <ion-button class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+4] === 'X' ?'white' :(gameBoard[i+4] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
-                  <ion-button class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+5] === 'X' ?'white' :(gameBoard[i+5] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
-                  <ion-button class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+6] === 'X' ?'white' :(gameBoard[i+6] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
-                  <ion-button class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+7] === 'X' ?'white' :(gameBoard[i+7] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
+                  <ion-button (click)="handleClick(i  ,gameBoard[i])"   class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i]   === 'X' ?'white' :(gameBoard[i]   === 'O' ?'black' :'green')">&#9679;</span></ion-button>
+                  <ion-button (click)="handleClick(i+1,gameBoard[i+1])" class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+1] === 'X' ?'white' :(gameBoard[i+1] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
+                  <ion-button (click)="handleClick(i+2,gameBoard[i+2])" class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+2] === 'X' ?'white' :(gameBoard[i+2] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
+                  <ion-button (click)="handleClick(i+3,gameBoard[i+3])" class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+3] === 'X' ?'white' :(gameBoard[i+3] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
+                  <ion-button (click)="handleClick(i+4,gameBoard[i+4])" class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+4] === 'X' ?'white' :(gameBoard[i+4] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
+                  <ion-button (click)="handleClick(i+5,gameBoard[i+5])" class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+5] === 'X' ?'white' :(gameBoard[i+5] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
+                  <ion-button (click)="handleClick(i+6,gameBoard[i+6])" class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+6] === 'X' ?'white' :(gameBoard[i+6] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
+                  <ion-button (click)="handleClick(i+7,gameBoard[i+7])" class="ion-no-margin" fill="outline"size="small" color="dark"><span [ngClass]="gameBoard[i+7] === 'X' ?'white' :(gameBoard[i+7] === 'O' ?'black' :'green')">&#9679;</span></ion-button>
             </ion-col>
           </div>
         </div>
       </ion-card>
-      <ion-button style="margin: 10px;" color="dark" shape="round" expand="full">Skip turn</ion-button>
+      <ion-button (click)="skipTurn()" style="margin: 10px;" color="dark" shape="round" expand="full">Skip turn</ion-button>
 
+    </ion-card>
+
+    <ion-card style="text-align: center; margin-top: 40px;" *ngIf="endedGame">
+
+      <ion-label style="margin: 10px;">
+        <h2>Winner</h2>
+      </ion-label>
+
+      <ion-card style="text-align: center; background-color: cadetblue; color: white;">
+        <h4>
+          {{scorePlayer1 > scorePlayer2 ? player1.playerName : player2.playerName}}
+        </h4>
+
+        <ion-item>
+        
+          <ion-label>Score:</ion-label>
+          <ion-badge color="dark">{{scorePlayer1 > scorePlayer2 ? scorePlayer1 : scorePlayer2}}</ion-badge>
+        </ion-item>
+        
+      </ion-card>
+
+      <ion-label style="margin: 10px;">
+        <h2>Looser</h2>
+      </ion-label>
+      <ion-card style="text-align: center; background-color: cadetblue; color: white;">
+        <h4>
+          {{scorePlayer1 < scorePlayer2 ? player1.playerName : player2.playerName}}
+        </h4>
+
+        <ion-item>
+        
+          <ion-label>Score:</ion-label>
+          <ion-badge color="dark">{{scorePlayer1 < scorePlayer2 ? scorePlayer1 : scorePlayer2}}</ion-badge>
+        </ion-item>
+      </ion-card>
     </ion-card>
 
   </ion-content>

@@ -172,6 +172,8 @@
             style="margin: 10%;"
             expand="block"
             color="dark"
+            (click)="saveIdGame()"
+            [routerLink]="['/board']"
         >
             Continue game
         </ion-button>
@@ -181,7 +183,7 @@
             style="margin: 10%;"
             expand="block"
             color="dark"
-        >
+            [routerLink]="['/board']">
           Watch game
         </ion-button>
       </ion-card>
@@ -231,7 +233,8 @@
             expand="block" 
             color = "success"
             style="margin-top: 10%;"
-            (click)="startGame()">
+            (click)="startGame()"
+            [routerLink]="['/board']">
             Start Game
         </ion-button>
 
