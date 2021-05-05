@@ -75,10 +75,6 @@ export class BoardPage implements OnInit {
 
       this.endedGame = game.endedGame;
 
-      if (game.currentPlayer === this.idUser.uid) {
-        this.informationToast('Is your turn!', 'success');
-      }
-
       this.gameBoard = game.boardGame;
 
       this.player1 = game.player1;
