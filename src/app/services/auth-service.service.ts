@@ -68,6 +68,5 @@ export class AuthServiceService {
     });
     toast.present();
   }
-
-
+  
 }

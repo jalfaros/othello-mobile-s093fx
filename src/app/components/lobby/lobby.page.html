@@ -241,4 +241,45 @@
     </ion-card-content>
 
   </ion-card>
+
+
+  <ion-card *ngIf="segmentModel == 'room' ">
+    <ion-card-header>
+      <h3>Room Chat</h3>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <div style="font-size: smaller;" *ngFor="let msg of messages">
+
+        <div *ngIf="msg.uidPlayer == user.uid && msg.roomId == selectedRoom" style="text-align: right;">
+          <span><ion-badge color="secondary"> {{ msg.displayName }} </ion-badge></span>
+          <p>{{ msg.message }}</p>
+        </div>
+
+        <div *ngIf="msg.uidPlayer !== user.uid && msg.roomId == selectedRoom">
+          <span><ion-badge color="success"> {{ msg.displayName }} </ion-badge></span>
+          <p>{{ msg.message }}</p>
+        </div>
+
+
+      </div>
+
+
+
+    </ion-card-content>
+
+    <ion-item style="margin-bottom: 5%;">
+      <ion-input  placeholder = "Message..."
+                  [(ngModel)]="chatMessage"
+      >
+      </ion-input>
+      <ion-button color="secondary" (click)="sendMessage()">
+        <ion-icon name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  
+  </ion-card> 
+
+
 </ion-content>
