@@ -17,7 +17,7 @@ export class LobbyPage implements OnInit {
   constructor(private _gameService: GameCreaterService,
     private toast: ToastController,
     public modalController: ModalController,
-    private _chatService : ChatService
+    private _chatService: ChatService
   ) { }
 
   segmentModel = "settings";
@@ -35,9 +35,6 @@ export class LobbyPage implements OnInit {
   selectedUser; //El usuario seleccionado para empezar un juego
   seePlayers: any; //Para ocultar la lista de amigos
   user = JSON.parse(localStorage.getItem('user'));
-
-  user = JSON.parse( localStorage.getItem('user') )
-
 
   ngOnInit() {
     this.getRooms();
@@ -186,28 +183,29 @@ export class LobbyPage implements OnInit {
       this.saveIdGame();
     })
   }
-  sendMessage(){
+  sendMessage() {
 
-  saveIdGame() {
-    localStorage.setItem('idGame', this.selectedGame.idGame);
-  }
-    if ( this.chatMessage.trim().length > 0 ){
-      this._chatService.addMessageChat( this.selectedRoom, this.chatMessage ).then( res => {
+    if (this.chatMessage.trim().length > 0) {
+      this._chatService.addMessageChat(this.selectedRoom, this.chatMessage).then(res => {
         this.chatMessage = ''
-      }).catch( err =>  {
+      }).catch(err => {
         this.chatMessage = ''
       })
     }
   }
 
+  saveIdGame() {
+    localStorage.setItem('idGame', this.selectedGame.idGame);
+  }
+
   logOut() {
     localStorage.removeItem('user');
   }
-  getMessages(){
-    this._chatService.getMessagesChat().subscribe( res => {
+  getMessages() {
+    this._chatService.getMessagesChat().subscribe(res => {
       this.messages = []
       for (const msg of res) {
-        this.messages.unshift( msg )
+        this.messages.unshift(msg)
       }
     })
   }

@@ -134,7 +134,7 @@ export class GameCreaterService {
   addGameRoom(room, game) {
 
     const headers = { 'Content-Type': 'application/json' };
-    return this.http.post(`${this.LOCAL_URL}/addGameRoom`, { params: { idRoom: room, uidUser: this.user.uid    } }, { headers });
+    return this.http.post(`${this.LOCAL_URL}/addGameRoom`, { params: { idRoom: room, idGame: game } }, { headers });
   }
 
 }
