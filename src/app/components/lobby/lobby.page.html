@@ -11,14 +11,39 @@
 </ion-header>
 
 <ion-content>
+
+
   <ion-card>
-    <ion-card-content><a style="text-align: left;">{{user.displayName}}</a></ion-card-content>
-    <ion-card-header>
+
+    <ion-card-content>
+      
+      <ion-grid>
+        <ion-row>
+
+          <ion-col style="text-align: left;">
+            <a style="text-align: left;">{{user.displayName}}</a>
+          </ion-col>
+
+
+          <ion-col style="text-align: right; font-size: x-large;">
+           <div (click)="refreshClick()">
+             <ion-icon name="refresh-outline"></ion-icon>
+            </div>
+          </ion-col>
+
+        </ion-row>
+      </ion-grid>
+
+
+    </ion-card-content>
+
+
+      <ion-card-header>
       
       <ion-segment [(ngModel)]="segmentModel">
       
         <ion-segment-button value="settings">
-          <ion-label>Rooms</ion-label>
+          <ion-label>Room Settings</ion-label>
         </ion-segment-button>
         
         <ion-segment-button value="room" [disabled]="!selectedRoom">
@@ -27,6 +52,8 @@
 
       </ion-segment>
     </ion-card-header>
+
+
 
   <ion-card-content *ngIf="segmentModel === 'settings'">
 
@@ -50,6 +77,9 @@
     </ion-button>
 
     </ion-card-content>
+
+
+
 
     <ion-card-content *ngIf="selectedRoom &&  segmentModel === 'settings'">
 
@@ -92,19 +122,23 @@
 
       <ion-button (click)="onMultiplayerClick()"
                   expand="block"
-                  color="medium"
+                  color="tertiary"
       >
+
+      
       Add friends to room
       </ion-button>
     
-      <ion-button (click)="seeListFriends()" expand="block" *ngIf="playersRoom.length > 1 && !seePlayers">
-        See friends in the room<ion-icon name="eye"></ion-icon> 
-      </ion-button>
-
-      <ion-button (click)="seeListFriends()" expand="block" *ngIf="playersRoom.length > 1 && seePlayers">
-        Close list of friends <ion-icon name="exit"></ion-icon>
-      </ion-button>
-
+      <div style="margin-top: 10%;">
+        <ion-button color = "secondary" (click)="seeListFriends()" expand="block" *ngIf="playersRoom.length > 1 && !seePlayers">
+          Room friends <ion-icon name="eye"></ion-icon> 
+        </ion-button>
+  
+        <ion-button color = "secondary" (click)="seeListFriends()" expand="block" *ngIf="playersRoom.length > 1 && seePlayers">
+          Close room friends <ion-icon name="exit"></ion-icon>
+        </ion-button>
+  
+      </div>
     <ion-card-content style="height: 200px; text-align: center;"  *ngIf="seePlayers">
       <h2>Friends in the room</h2>
       <ion-content class="ion-padding">
@@ -132,7 +166,9 @@
 
       <ion-label>
       </ion-label>
-      Games of room
+      Room Games
+
+
       <ion-item [disabled] = "games.length === 0">
         <ion-label>Select game</ion-label>
         <ion-select 
@@ -159,12 +195,12 @@
 
       <ion-card 
           *ngIf="segmentModel === 'room' && selectedGame && buttonJoin" 
-          style="background-color:cadetblue; margin: 5px;">
+          style="background-color:rgb(203, 230, 222); margin: 5px; margin-top: 5%">
 
         <ion-card-content style="margin-left: 5%;">
-          <p><ion-label><strong>Id game: </strong> {{selectedGame.idGame}}</ion-label></p>
+          <p><ion-label><strong>Game id: </strong> {{selectedGame.idGame}}</ion-label></p>
           <p><ion-label><strong>Created by: </strong> {{game.player1.playerName}}</ion-label></p>
-          <p><ion-label><strong>Vs: </strong> {{game.player2.playerName}}</ion-label></p>
+          <p><ion-label><strong>Opponent: </strong> {{game.player2.playerName}}</ion-label></p>
         </ion-card-content>
 
         <ion-button 

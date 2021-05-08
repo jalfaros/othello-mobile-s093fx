@@ -15,18 +15,18 @@
           Players
         </ion-list-header>
 
-        <ion-item *ngFor="let user of registeredUsers" (click)="onSelectedPlayer( user )" >
-          <ion-avatar style="margin-right: 5%;">
-            <img src="../../../../../assets/icon/avatar.png">
-          </ion-avatar>
-          <ion-label>
-            <h2>{{ user.displayName }}</h2>
-            <h3>{{ user.email }}</h3>
-            <p>{{ user.uid }}</p>
-          </ion-label>
-
-        </ion-item> 
-
+        <div *ngIf="roomPlayers.length != 0">
+          <ion-item  *ngFor="let user of registeredUsers" (click)="onSelectedPlayer( user )" >
+            <ion-avatar style="margin-right: 5%;">
+              <img src="../../../../../assets/icon/avatar.png">
+            </ion-avatar>
+            <ion-label>
+              <h2>{{ user.displayName }}</h2>
+              <h3>{{ user.email }}</h3>
+              <p>{{ user.uid }}</p>
+            </ion-label>
+          </ion-item> 
+        </div>
 
       </ion-list>
     </ion-card-content>

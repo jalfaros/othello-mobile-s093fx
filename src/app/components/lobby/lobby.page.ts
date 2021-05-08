@@ -38,7 +38,7 @@ export class LobbyPage implements OnInit {
 
   ngOnInit() {
     this.getRooms();
-    this.getMessages()
+    this.getMessages();
   }
 
   async presentModal() {
@@ -68,12 +68,15 @@ export class LobbyPage implements OnInit {
   }
 
   createRoom() {
+
     this._gameService.createRoom(this.user.uid).subscribe(res => {
 
       if (!res['idRoom']) {
+
         this.informationToast('Something went wrong creating the room!', 'danger');
         return;
       } else {
+
         this.informationToast('Room created succesfully', 'success')
         this.rooms.push(res['idRoom']);
       }
@@ -212,6 +215,16 @@ export class LobbyPage implements OnInit {
 
   seeListFriends() {
     this.seePlayers = !this.seePlayers;
+  }
+
+  refreshClick() {
+    if (this.segmentModel === 'settings') {
+      this.getRooms();
+    } else {
+      this.getGamesRoom(this.selectedRoom);
+    }
+
+
   }
 
 

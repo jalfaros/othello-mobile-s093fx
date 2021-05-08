@@ -19,7 +19,7 @@ export class PlayersPage implements OnInit {
 
 
   ngOnInit() {
-
+    
     this.fetchRoomPlayers();
   }
 
