@@ -8,6 +8,8 @@ import * as firebase from 'firebase/app';
 })
 export class ChatService {
 
+
+
   constructor(private afs: AngularFirestore) { }
   user = JSON.parse(localStorage.getItem('user'))
 

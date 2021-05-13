@@ -36,6 +36,8 @@ export class LobbyPage implements OnInit {
   seePlayers: any; //Para ocultar la lista de amigos
   user = JSON.parse(localStorage.getItem('user'));
 
+
+
   ngOnInit() {
     this.getRooms();
     this.getMessages();
@@ -186,13 +188,15 @@ export class LobbyPage implements OnInit {
       this.saveIdGame();
     })
   }
-  sendMessage() {
 
-    if (this.chatMessage.trim().length > 0) {
-      this._chatService.addMessageChat(this.selectedRoom, this.chatMessage).then(res => {
-        this.chatMessage = ''
+  sendMessage() {
+    var messageAux = this.chatMessage;
+    this.chatMessage = '';
+    if (messageAux.trim().length > 0) {
+      this._chatService.addMessageChat(this.selectedRoom, messageAux).then(res => {
+        //this.chatMessage = ''
       }).catch(err => {
-        this.chatMessage = ''
+        //this.chatMessage = ''
       })
     }
   }
@@ -204,6 +208,9 @@ export class LobbyPage implements OnInit {
   logOut() {
     localStorage.removeItem('user');
   }
+
+
+  
   getMessages() {
     this._chatService.getMessagesChat().subscribe(res => {
       this.messages = []

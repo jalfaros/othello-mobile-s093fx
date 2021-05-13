@@ -14,7 +14,7 @@ export class GameCreaterService {
   constructor(private http: HttpClient) { }
 
   getPlayerGames(idUser) {
-    return this.http.get(`${this.BASE_URL}/getPlayerGames?playerId=${idUser}`)
+    return this.http.get(`${this.LOCAL_URL}/getPlayerGames?playerId=${idUser}`)
       .pipe(map(res => res['games']));
   }
 
@@ -25,7 +25,7 @@ export class GameCreaterService {
    * @returns 
    */
   createGame(param) {
-    return this.http.get(`${this.BASE_URL}/newGame?createdBy=${param}`)
+    return this.http.get(`${this.LOCAL_URL}/newGame?createdBy=${param}`)
       .pipe(map(res => res));
   }
 
@@ -70,7 +70,7 @@ export class GameCreaterService {
   }
 
   getAllPlayers() {
-    return this.http.get(`${this.BASE_URL}/getAllPlayers`)
+    return this.http.get(`${this.LOCAL_URL}/getAllPlayers`)
       .pipe(map(res => res['users']));
   }
 
